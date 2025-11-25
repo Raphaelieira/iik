@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsifae Architecture | Design-Led Real Estate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           1. CSS VARIABLES & RESET
+           ========================================= */
+        :root {
+            --primary-color: #1A3C34; /* Deep Tropical Green */
+            --secondary-color: #D4AF37; /* Muted Gold */
+            --bg-light: #F4F4F0; /* Off-White / Stone */
+            --bg-white: #FFFFFF;
+            --text-dark: #222222;
+            --text-muted: #666666;
+            --border-color: #E0E0E0;
+            --font-heading: 'Cinzel', serif;
+            --font-body: 'Lato', sans-serif;
+            --transition: all 0.3s ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* =========================================
+           2. COMPONENT UTILITIES
+           ========================================= */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-padding {
+            padding: 100px 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: var(--primary-color);
+            color: var(--bg-white);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: 1px solid var(--primary-color);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--primary-color);
+        }
+
+        .section-subtitle {
+            display: block;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+        }
+
+        /* =========================================
+           3. HEADER
+           ========================================= */
+        header {
+            background-color: var(--bg-white);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            font-weight: 400;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* =========================================
+           4. HERO SECTION
+           ========================================= */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(26, 60, 52, 0.4), rgba(26, 60, 52, 0.4)), url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--bg-white);
+        }
+
+        .hero-content {
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            color: var(--bg-white);
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            color: #f0f0f0;
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+        }
+
+        .hero .btn {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .hero .btn:hover {
+            background-color: transparent;
+            color: var(--bg-white);
+            border-color: var(--bg-white);
+        }
+
+        /* =========================================
+           5. ABOUT US (The Firm)
+           ========================================= */
+        .about {
+            background-color: var(--bg-white);
+        }
+
+        .about-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            border-radius: 2px;
+            box-shadow: 20px 20px 0px var(--secondary-color);
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+        }
+
+        /* =========================================
+           6. SERVICES (Expertise)
+           ========================================= */
+        .services {
+            background-color: var(--bg-light);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--bg-white);
+            padding: 40px;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        /* =========================================
+           7. ADVANTAGES (Why Parsifae)
+           ========================================= */
+        .advantages {
+            padding: 0;
+        }
+
+        .adv-layout {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .adv-image {
+            flex: 1;
+            min-width: 400px;
+            background: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover;
+            min-height: 600px;
+        }
+
+        .adv-content {
+            flex: 1;
+            min-width: 400px;
+            padding: 100px 60px;
+            background-color: var(--primary-color);
+            color: var(--bg-white);
+        }
+
+        .adv-content h2, .adv-content h3 {
+            color: var(--bg-white);
+        }
+
+        .adv-content .section-subtitle {
+            color: var(--secondary-color);
+        }
+
+        .adv-item {
+            margin-bottom: 40px;
+            border-left: 1px solid var(--secondary-color);
+            padding-left: 20px;
+        }
+
+        .adv-item p {
+            color: #ccc;
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+
+        /* =========================================
+           8. PROCESS (The Methodology)
+           ========================================= */
+        .process {
+            background-color: var(--bg-white);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+
+        .step-number {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            color: rgba(212, 175, 55, 0.2); /* Transparent Gold */
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .step-content {
+            position: relative;
+            z-index: 1;
+            margin-top: 30px;
+        }
+
+        /* =========================================
+           9. CONTACT FORM
+           ========================================= */
+        .contact {
+            background-color: var(--bg-light);
+        }
+
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+        }
+
+        .contact-info {
+            background-color: var(--bg-white);
+            padding: 50px;
+            height: 100%;
+        }
+
+        .info-item {
+            margin-bottom: 30px;
+        }
+
+        .info-item h4 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+
+        .contact-form {
+            background-color: var(--bg-white);
+            padding: 50px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            background-color: #fafafa;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary-color);
+            background-color: var(--bg-white);
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        /* =========================================
+           10. FOOTER
+           ========================================= */
+        footer {
+            background-color: #112621;
+            color: #888;
+            padding: 60px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            color: #888;
+            margin: 0;
+        }
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 2.5rem; }
+            .about-wrapper, .contact-wrapper { grid-template-columns: 1fr; }
+            .process-steps { grid-template-columns: 1fr; }
+            .adv-layout { flex-direction: column; }
+            .adv-image { order: -1; min-height: 300px; }
+            .nav-wrapper { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">PARSIFAE</div>
+            <nav>
+                <ul>
+                    <li><a href="#about">The Firm</a></li>
+                    <li><a href="#services">Expertise</a></li>
+                    <li><a href="#advantages">Why Us</a></li>
+                    <li><a href="#process">Method</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Architecture of Living.<br>Curators of Real Estate.</h1>
+            <p>Parsifae Architecture bridges the gap between visionary design and premium real estate brokerage in Goiânia, helping you acquire properties that stand the test of time.</p>
+            <a href="#contact" class="btn">View Portfolio</a>
+        </div>
+    </section>
+
+    <section id="about" class="section-padding about">
+        <div class="container">
+            <div class="about-wrapper">
+                <div class="about-text">
+                    <span class="section-subtitle">Our Vision</span>
+                    <h2 class="section-title">Beyond Bricks and Mortar</h2>
+                    <p>Parsifae Architecture Ltda operates at the unique intersection of architectural design and real estate brokerage. Led by Raphael Augusto Borges Vieira, our firm understands that buying a property is not just a financial transaction, but an investment in a lifestyle and an aesthetic legacy.</p>
+                    <p>Based in the vibrant heart of Goiânia, Goiás, we distinguish ourselves from traditional brokers by offering an architect's eye to every viewing and negotiation. We don't just sell square footage; we evaluate structural integrity, design potential, and spatial harmony.</p>
+                    <p>Whether you are an investor looking for high-yield developments or a homeowner seeking a residence with soul, Parsifae provides the technical expertise and market insight to secure your ideal asset. We believe every property has a narrative, and our job is to help you write the next chapter.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Parsifae Architecture Office">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section-padding services">
+        <div class="container">
+            <div class="text-center">
+                <span class="section-subtitle">What We Do</span>
+                <h2 class="section-title">Integrated Property Solutions</h2>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <span class="service-icon">&#9878;</span> <h3>Architectural Brokerage</h3>
+                    <p>We specialize in the sale and acquisition of architecturally significant properties. Our team assesses the build quality, zoning potential, and design merit of listings, ensuring our clients invest in real estate that holds intrinsic value beyond the market trends.</p>
+                </div>
+
+                <div class="service-card">
+                    <span class="service-icon">&#9998;</span> <h3>Design-Build Consulting</h3>
+                    <p>For clients purchasing land or fixer-uppers, we offer preliminary architectural consulting during the buying process. We help visualize renovations, estimate construction costs, and define the feasibility of your dream project before you sign the deed.</p>
+                </div>
+
+                <div class="service-card">
+                    <span class="service-icon">&#128200;</span> <h3>Asset Management</h3>
+                    <p>We assist investors in managing real estate portfolios with a focus on value retention through maintenance and aesthetic upgrades. We identify properties in Goiás with high appreciation potential driven by urban planning and architectural development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="advantages" class="advantages">
+        <div class="adv-layout">
+            <div class="adv-image"></div> <div class="adv-content">
+                <span class="section-subtitle">The Parsifae Standard</span>
+                <h2 class="section-title">Why Choose Parsifae?</h2>
+
+                <div class="adv-item">
+                    <h3>The Architect's Perspective</h3>
+                    <p>Most brokers see rooms; we see spatial flow and structural possibilities. Our background in architecture allows us to identify hidden defects or hidden gems that others miss, protecting your investment.</p>
+                </div>
+
+                <div class="adv-item">
+                    <h3>Goiânia Market Mastery</h3>
+                    <p>Deeply rooted in Goiás, we possess intimate knowledge of local neighborhoods, zoning laws, and the luxury market. We connect you with exclusive listings that often never hit the public market.</p>
+                </div>
+
+                <div class="adv-item">
+                    <h3>End-to-End Guidance</h3>
+                    <p>From the initial search to the final renovation blueprint, we stay with you. We bridge the gap between "Real Estate Agent" and "Designer," offering a seamless experience for discerning buyers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="section-padding process">
+        <div class="container">
+            <div class="text-center">
+                <span class="section-subtitle">Our Methodology</span>
+                <h2 class="section-title">The Acquisition Journey</h2>
+            </div>
+
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Consultation & Curating</h3>
+                        <p>We begin by understanding your lifestyle needs and aesthetic preferences. We then curate a selection of properties that match not just your budget, but your architectural taste.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Analysis & Negotiation</h3>
+                        <p>We perform a technical analysis of the chosen property, identifying potential renovation needs. We then use this data to negotiate a fair price based on the true condition of the asset.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Closing & Vision</h3>
+                        <p>We facilitate a smooth legal closing. Post-purchase, we can provide architectural sketches or refer you to trusted contractors to begin transforming the space into your home.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-padding contact">
+        <div class="container">
+            <div class="text-center">
+                <span class="section-subtitle">Get In Touch</span>
+                <h2 class="section-title">Start Your Search</h2>
+            </div>
+
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <h4>Headquarters</h4>
+                        <p>GOIANIA, GOIAS<br>Brazil</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Electronic Mail</h4>
+                        <p>info@parsifaearchitecture.info</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Principal</h4>
+                        <p>Raphael Augusto Borges Vieira</p>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form action="#" method="POST">
+                        <div>
+                            <input type="text" placeholder="Your Name" required>
+                        </div>
+                        <div>
+                            <input type="email" placeholder="Email Address" required>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Property Type / Service Needed">
+                        </div>
+                        <div>
+                            <textarea placeholder="Tell us about your requirements..."></textarea>
+                        </div>
+                        <button type="submit" class="btn">Submit Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PARSIFAE ARCHITECTURE LTDA. All Rights Reserved.</p>
+            <p>Real Estate & Architectural Services.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
